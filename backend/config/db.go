@@ -15,7 +15,7 @@ var DB *gorm.DB
 func ConnectDB() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("❌ Erreur chargement .env")
+		log.Fatal("[ERROR] Error loading .env file")
 	}
 
 	dsn := fmt.Sprintf(
@@ -29,9 +29,9 @@ func ConnectDB() {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("❌ Connexion à PostgreSQL échouée : ", err)
+		log.Fatal("[ERROR] Connection to PostgreSQL failed: ", err)
 	}
 
 	DB = db
-	log.Println("✅ Connexion PostgreSQL OK")
+	log.Println("[INFO] Connection to PostgreSQL OK")
 }
