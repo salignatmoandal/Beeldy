@@ -7,45 +7,45 @@ import (
 	"github.com/salignatmoandal/equipment-api/models"
 )
 
-// Récupérer tous les équipements
+// Retrieve all equipments
 func GetAllEquipments() ([]models.Equipment, error) {
 	var equipments []models.Equipment
 	result := config.DB.Find(&equipments)
 	return equipments, result.Error
 }
 
-// Récupérer un équipement par ID
+// Retrieve an equipment by ID
 func GetEquipmentByID(id string) (models.Equipment, error) {
 	var equipment models.Equipment
 	result := config.DB.First(&equipment, "id = ?", id)
 	if result.Error != nil {
-		return models.Equipment{}, errors.New("équipement introuvable")
+		return models.Equipment{}, errors.New("[ERROR] Equipment not found")
 	}
 	return equipment, nil
 }
 
-// Créer un nouvel équipement
+// Create a new equipment
 func CreateEquipment(input models.Equipment) (models.Equipment, error) {
 	result := config.DB.Create(&input)
 	return input, result.Error
 }
 
-// Mettre à jour un équipement
+// Update an equipment
 func UpdateEquipment(id string, data models.Equipment) (models.Equipment, error) {
 	var equipment models.Equipment
 	if err := config.DB.First(&equipment, "id = ?", id).Error; err != nil {
-		return models.Equipment{}, errors.New("équipement non trouvé")
+		return models.Equipment{}, errors.New("[ERROR] Equipment not found")
 	}
 
 	result := config.DB.Model(&equipment).Updates(data)
 	return equipment, result.Error
 }
 
-// Supprimer un équipement
+// Delete an equipment
 func DeleteEquipment(id string) error {
 	var equipment models.Equipment
 	if err := config.DB.First(&equipment, "id = ?", id).Error; err != nil {
-		return errors.New("équipement non trouvé")
+		return errors.New("[ERROR] Equipment not found")
 	}
 	return config.DB.Delete(&equipment).Error
 }

@@ -1,0 +1,66 @@
+
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Output of the go build command
+/app
+/backend/app
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Go vendor directory (if you use go mod vendor)
+vendor/
+
+# Dependency directories (remove the comment below if you use these tools)
+# Godeps/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage files
+*.coverprofile
+coverage.out
+
+# Test binary output
+*.test
+
+# Docker
+*.tar
+docker-compose.override.yml
+
+# GitHub Actions artifacts
+.github/workflows/*.log
+
+# Environment files
+.env
+.env.*
+
+# Trivy cache
+.trivy/
+
+# Cosign key (if you use cosign for signing images)
+cosign.key
+cosign.pub
+
+# Local configuration
+config/local.yaml
