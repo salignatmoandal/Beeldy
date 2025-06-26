@@ -1,32 +1,32 @@
-# Étape 1 : base image légère avec Python
+# Step 1: light image with Python
 FROM python:3.10-slim
 
-# Étape 2 : éviter les interactions inutiles
+# Step 2: avoid unnecessary interactions
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     TRANSFORMERS_CACHE=/app/.cache/huggingface
 
-# Étape 3 : installer les dépendances système utiles
+# Step 3: install the useful system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libgl1 \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Étape 4 : définir le dossier de travail
+# Step 4: define the working directory
 WORKDIR /app
 
-# Étape 5 : copier les fichiers requirements (si tu utilises poetry, adapte ici)
+# Step 5: copy the requirements file (if you use poetry, adapt here)
 COPY requirements.txt .
 
-# Étape 6 : installer les dépendances Python
+# Step 6: install the Python dependencies
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Étape 7 : copier le code
+# Step 7: copy the code
 COPY . .
 
-# Étape 8 : exposer le port pour FastAPI (optionnel)
+# Step 8: expose the port for FastAPI (optional)
 EXPOSE 8000
 
-# Étape 9 : démarrer le serveur Uvicorn
+# Step 9: start the Uvicorn server
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
