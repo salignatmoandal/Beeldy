@@ -17,11 +17,8 @@ var DB *gorm.DB
 // ConnectDB initializes the PostgreSQL connection using GORM.
 // This should be called once during application startup.
 func ConnectDB() {
-	// Load environment variables (non-fatal if running in Docker or CI/CD)
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("[ERROR] Failed to load .env file. Ensure configuration is set via environment.")
-	}
+	// Load .env if present, otherwise continue without error (Docker Compose injects already the variables)
+	_ = godotenv.Load()
 
 	// Build DSN (Data Source Name) from environment variables
 	dsn := fmt.Sprintf(

@@ -8,6 +8,7 @@
 *.dylib
 *.test
 *.out
+.env
 
 # Output of the go build command
 /app

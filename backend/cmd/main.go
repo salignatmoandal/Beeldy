@@ -4,10 +4,16 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/salignatmoandal/equipment-api/config"
 	"github.com/salignatmoandal/equipment-api/models"
 	"github.com/salignatmoandal/equipment-api/routes"
 )
+
+func init() {
+
+	_ = godotenv.Load(".env")
+}
 
 func main() {
 	// Connexion to database

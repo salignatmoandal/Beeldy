@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/salignatmoandal/equipment-api/config"
 	"github.com/salignatmoandal/equipment-api/models"
+	"github.com/salignatmoandal/equipment-api/services"
 )
 
 // GET /api/equipments
@@ -52,7 +53,7 @@ func UpdateEquipment(c *gin.Context) {
 	var equipment models.Equipment
 
 	if err := config.DB.First(&equipment, "id = ?", id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Équipement non trouvé"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "[ERROR] Equipment not found"})
 		return
 	}
 
@@ -73,10 +74,30 @@ func DeleteEquipment(c *gin.Context) {
 	var equipment models.Equipment
 
 	if err := config.DB.First(&equipment, "id = ?", id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Équipement non trouvé"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "[ERROR] Equipment not found"})
 		return
 	}
 
 	config.DB.Delete(&equipment)
 	c.JSON(http.StatusOK, gin.H{"deleted": true})
+}
+
+func EnrichEquipment(c *gin.Context) {
+	var req struct {
+		Name string `json:"name"`
+		TopK int    `json:"top_k"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if req.TopK == 0 {
+		req.TopK = 3
+	}
+	result, err := services.CallEnrichService(req.Name, req.TopK)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, result)
 }
