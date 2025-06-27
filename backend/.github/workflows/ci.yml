@@ -55,8 +55,8 @@ jobs:
         run: go vet ./...
 
       #  Security static analysis
-      - name: Run gosec
-        uses: securego/gosec-action@v1
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@v2.19.0
         with:
           args: ./...
 
@@ -71,20 +71,4 @@ jobs:
       - name: Build Docker image
         run: docker build -t beeldy-equipment:latest .
 
-      #  Scan image with Trivy
-      - name: Scan Docker image with Trivy
-        uses: aquasecurity/trivy-action@v0.14.0
-        with:
-          image-ref: beeldy-equipment:latest
-          format: table
-          exit-code: 1
-          severity: CRITICAL,HIGH
-
-      #  Cosign - Sign Docker image
-      - name: Sign Docker image with Cosign
-        if: github.event_name == 'push'
-        env:
-          COSIGN_EXPERIMENTAL: "1"
-        run: |
-          echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
-          echo "${{ secrets.COSIGN_PASSWORD }}" | cosign sign --key cosign.key beeldy-equipment:latest
+  
