@@ -14,7 +14,7 @@ func GetEquipments(c *gin.Context) {
 	var equipments []models.Equipment
 	result := config.DB.Find(&equipments)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erreur lors de la récupération"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving equipments"})
 		return
 	}
 	c.JSON(http.StatusOK, equipments)
@@ -26,7 +26,7 @@ func GetEquipmentByID(c *gin.Context) {
 	var equipment models.Equipment
 	result := config.DB.First(&equipment, "id = ?", id)
 	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Équipement introuvable"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Equipment not found"})
 		return
 	}
 	c.JSON(http.StatusOK, equipment)
@@ -41,7 +41,7 @@ func CreateEquipment(c *gin.Context) {
 	}
 	result := config.DB.Create(&input)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erreur lors de la création"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error creating equipment"})
 		return
 	}
 	c.JSON(http.StatusCreated, input)
