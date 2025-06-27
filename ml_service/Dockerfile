@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
 # Step 4: define the working directory
 WORKDIR /app
 
-# Step 5: copy the requirements file (if you use poetry, adapt here)
+# Step 5: copy the requirements file
 COPY requirements.txt .
 
 # Step 6: install the Python dependencies
@@ -25,7 +25,7 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Step 7: copy the code
 COPY . .
 
-# Step 8: expose the port for FastAPI (optional)
+# Step 8: expose the port for FastAPI 
 EXPOSE 8000
 
 # Step 9: start the Uvicorn server
