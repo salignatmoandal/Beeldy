@@ -10,23 +10,23 @@ import (
 )
 
 func main() {
-	// Connexion à la base de données PostgreSQL
+	// Connexion to database
 	config.ConnectDB()
 
-	// Migration automatique des modèles
+	// Automatic migration of models
 	err := config.DB.AutoMigrate(&models.Equipment{})
 	if err != nil {
-		log.Fatal("❌ Échec de la migration GORM : ", err)
+		log.Fatal("❌ Error migrating GORM : ", err)
 	}
 
-	// Initialisation du routeur Gin
+	// Initialisation of the Gin router
 	r := gin.Default()
 
 	// Enregistrement des routes
 	routes.RegisterRoutes(r)
 
-	// Lancement du serveur sur le port 3000
+	// Launching the server on port 3000
 	if err := r.Run(":3000"); err != nil {
-		log.Fatal("❌ Échec du lancement du serveur : ", err)
+		log.Fatal("❌ Error launching the server : ", err)
 	}
 }
