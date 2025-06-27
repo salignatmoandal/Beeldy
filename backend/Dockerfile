@@ -1,9 +1,8 @@
-
-FROM golang:1.21-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
 
-# Copie des fichiers go mod et sum
+# Copy go mod and sum files
 COPY go.mod go.sum ./
 RUN go mod download
 
@@ -13,16 +12,16 @@ COPY . .
 
 RUN go build -o app ./cmd
 
-# Étape 2 : image finale, plus légère
+# Step 2 : light image
 FROM alpine:latest
 
 WORKDIR /app
 
-# Copie du binaire depuis l'étape de build
+# copy the binary from the builder image
 COPY --from=builder /app/app .
 
-# Port à exposer
+# expose the port
 EXPOSE 3000
 
-# Commande de lancement
+# launch the app
 CMD ["./app"]
