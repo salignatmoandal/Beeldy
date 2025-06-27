@@ -1,4 +1,4 @@
-# Étape 1 : build de l'application
+
 FROM golang:1.21-alpine AS builder
 
 WORKDIR /app
@@ -10,7 +10,7 @@ RUN go mod download
 # Copie du code source
 COPY . .
 
-# Build de l'application (remplace 'main.go' par ton point d'entrée si besoin)
+
 RUN go build -o app ./cmd
 
 # Étape 2 : image finale, plus légère
@@ -21,8 +21,8 @@ WORKDIR /app
 # Copie du binaire depuis l'étape de build
 COPY --from=builder /app/app .
 
-# Port à exposer (à adapter selon ton app)
-EXPOSE 8080
+# Port à exposer
+EXPOSE 3000
 
 # Commande de lancement
 CMD ["./app"]
