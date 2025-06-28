@@ -133,6 +133,7 @@ export function EquipmentTable({
             <SortableHeader field="brand">Brand</SortableHeader>
             <SortableHeader field="model">Model</SortableHeader>
             <SortableHeader field="status">Status</SortableHeader>
+            <SortableHeader field="createdAt">Date de création</SortableHeader>
             <TableHead className="w-12"></TableHead>
           </TableRow>
         </TableHeader>
@@ -157,6 +158,17 @@ export function EquipmentTable({
                 <Badge variant={getStatusBadgeVariant(equipment.status)} className="capitalize">
                   {equipment.status}
                 </Badge>
+              </TableCell>
+              <TableCell className="text-gray-600">
+                {equipment.createdAt
+                  ? new Date(equipment.createdAt).toLocaleDateString("fr-FR", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : "-"}
               </TableCell>
               <TableCell>
                 <DropdownMenu>
