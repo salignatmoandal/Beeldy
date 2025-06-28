@@ -9,8 +9,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import type { Equipment, EquipmentHierarchy } from "@/types/equipment"
+import type { EnrichItem, Equipment, EquipmentHierarchy } from "@/types/equipment"
 import { EquipmentAPI } from "@/lib/services/equiment-api"
+
 
 interface EquipmentFormModalProps {
   isOpen: boolean
@@ -31,6 +32,45 @@ interface FormData {
   model: string
   status: Equipment["status"]
 }
+function enrichResultsToHierarchy(results: EnrichItem[]): {
+    domains: {
+      [domain: string]: {
+        types: {
+          [type: string]: {
+            categories: {
+              [category: string]: {
+                subCategories: string[]
+              }
+            }
+          }
+        }
+      }
+    }
+  } {
+    const hierarchy = { domains: {} as Record<string, any> }
+  
+    results.forEach((item) => {
+      if (!item.domain) return
+      if (!hierarchy.domains[item.domain]) {
+        hierarchy.domains[item.domain] = { types: {} }
+      }
+      if (!item.type) return
+      if (!hierarchy.domains[item.domain].types[item.type]) {
+        hierarchy.domains[item.domain].types[item.type] = { categories: {} }
+      }
+      if (!item.category) return
+      if (!hierarchy.domains[item.domain].types[item.type].categories[item.category]) {
+        hierarchy.domains[item.domain].types[item.type].categories[item.category] = { subCategories: [] }
+      }
+      if (
+        item.sub_category &&
+        !hierarchy.domains[item.domain].types[item.type].categories[item.category].subCategories.includes(item.sub_category)
+      ) {
+        hierarchy.domains[item.domain].types[item.type].categories[item.category].subCategories.push(item.sub_category)
+      }
+    })
+    return hierarchy
+  }
 
 export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hierarchy, setHierarchy }: EquipmentFormModalProps) {
   const [formData, setFormData] = useState<FormData>({
@@ -77,16 +117,16 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
     if (formData.name && formData.name.length > 2) {
       EquipmentAPI.enrichEquipment(formData.name)
         .then((result) => {
-          console.log("Réponse enrichissement :", result)
-          setHierarchy(result.hierarchy || result)
+          const hierarchy = enrichResultsToHierarchy(result?.results || [])
+          setHierarchy(hierarchy)
         })
         .catch(() => {
           setHierarchy({ domains: {} })
         })
     }
-  }, [formData.name])
+  }, [formData.name, setHierarchy])
 
-  const domains = Object.keys(hierarchy.domains)
+  const domains = Object.keys(hierarchy?.domains || {})
   const types = formData.domain ? Object.keys(hierarchy.domains[formData.domain]?.types || {}) : []
   const categories =
     formData.domain && formData.type
@@ -141,6 +181,12 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
     e.preventDefault()
 
     if (!validateForm()) return
+
+    if (!formData.subCategory) {
+      // Show user error
+      alert("Please select a sub-category")
+      return;
+    }
 
     setLoading(true)
     try {
@@ -269,6 +315,7 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
                   <SelectValue placeholder="Select sub-category" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="all-sub-categories">Toutes les sous-catégories</SelectItem>
                   {subCategories.map((subCategory) => (
                     <SelectItem key={subCategory} value={subCategory}>
                       {subCategory}

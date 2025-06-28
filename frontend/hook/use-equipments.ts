@@ -24,6 +24,8 @@ export function useEquipments() {
     clearSelection,
     getFilteredEquipments,
     getEquipmentById,
+    hierarchy,
+    setHierarchy,
   } = useEquipmentStore()
 
   // Charger les équipements depuis votre backend Go
@@ -119,6 +121,7 @@ export function useEquipments() {
     error,
     filters,
     selectedIds,
+    hierarchy,
     
     // Actions
     loadEquipments,
@@ -138,5 +141,6 @@ export function useEquipments() {
     
     // Utilitaires
     getEquipmentById,
+    setHierarchy,
   }
 }

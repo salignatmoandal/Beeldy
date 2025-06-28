@@ -2,6 +2,7 @@ import { create } from "zustand"
 import { devtools, persist } from "zustand/middleware"
 import { EquipmentSchema, EquipmentFiltersSchema } from "@/lib/schemas/equipment"
 import type { Equipment, EquipmentFilters } from "@/lib/schemas/equipment"
+import type { EquipmentHierarchy } from "@/types/equipment"
 
 interface EquipmentState {
   // État des données
@@ -14,6 +15,9 @@ interface EquipmentState {
   
   // Sélection
   selectedIds: string[]
+  
+  // État d'hydratation
+  _hasHydrated: boolean
   
   // Actions
   setEquipments: (equipments: Equipment[]) => void
@@ -32,9 +36,15 @@ interface EquipmentState {
   toggleSelection: (id: string) => void
   clearSelection: () => void
   
+  // Actions d'hydratation
+  setHasHydrated: (hasHydrated: boolean) => void
+  
   // Getters calculés
   getFilteredEquipments: () => Equipment[]
   getEquipmentById: (id: string) => Equipment | undefined
+  
+  hierarchy: EquipmentHierarchy
+  setHierarchy: (hierarchy: EquipmentHierarchy) => void
 }
 
 const initialFilters: EquipmentFilters = {
@@ -44,6 +54,8 @@ const initialFilters: EquipmentFilters = {
   category: "",
   subCategory: "",
 }
+
+const initialHierarchy: EquipmentHierarchy = { domains: {} }
 
 export const useEquipmentStore = create<EquipmentState>()(
   devtools(
@@ -55,6 +67,8 @@ export const useEquipmentStore = create<EquipmentState>()(
         error: null,
         filters: initialFilters,
         selectedIds: [],
+        _hasHydrated: false,
+        hierarchy: initialHierarchy,
         
         // Actions pour les équipements
         setEquipments: (equipments) => {
@@ -129,6 +143,9 @@ export const useEquipmentStore = create<EquipmentState>()(
         
         clearSelection: () => set({ selectedIds: [] }),
         
+        // Actions d'hydratation
+        setHasHydrated: (hasHydrated) => set({ _hasHydrated: hasHydrated }),
+        
         // Getters calculés
         getFilteredEquipments: () => {
           const { equipments, filters } = get()
@@ -149,6 +166,8 @@ export const useEquipmentStore = create<EquipmentState>()(
           const { equipments } = get()
           return equipments.find(eq => eq.id === id)
         },
+        
+        setHierarchy: (hierarchy) => set({ hierarchy: hierarchy || initialHierarchy }),
       }),
       {
         name: "equipment-store",
@@ -156,6 +175,9 @@ export const useEquipmentStore = create<EquipmentState>()(
           equipments: state.equipments,
           filters: state.filters,
         }),
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true)
+        },
       }
     ),
     {

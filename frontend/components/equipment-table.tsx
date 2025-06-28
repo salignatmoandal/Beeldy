@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { MoreHorizontal, Edit, Trash2, ChevronDown, ChevronUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -11,6 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import type { Equipment } from "@/types/equipment"
 import { LoadingSkeleton } from "@/components/ui/loading-skeleton"
+import { useEquipmentStore } from "@/lib/stores/equipment-store"
 
 interface EquipmentTableProps {
   equipments: Equipment[]
@@ -34,6 +35,13 @@ export function EquipmentTable({
 }: EquipmentTableProps) {
   const [sortField, setSortField] = useState<SortField>("name")
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
+  const [mounted, setMounted] = useState(false)
+  const { _hasHydrated } = useEquipmentStore()
+
+  // Gérer l'hydratation
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -95,6 +103,11 @@ export function EquipmentTable({
       </Button>
     </TableHead>
   )
+
+  // Ne pas rendre le composant jusqu'à ce que l'hydratation soit terminée
+  if (!mounted || !_hasHydrated) {
+    return <LoadingSkeleton />
+  }
 
   if (loading) {
     return <LoadingSkeleton />

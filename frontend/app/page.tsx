@@ -9,7 +9,7 @@ import { EquipmentFiltersComponent } from "@/components/equipment-filter"
 import { EquipmentTable } from "@/components/equipment-table"
 import { DeleteConfirmationDialog } from "@/components/delete-confirmation-dialog"
 import { EquipmentFormModal } from "@/components/equipment-form-modal"
-import type { Equipment } from "@/types/equipment"
+import type { Equipment, EquipmentHierarchy } from "@/types/equipment"
 
 export default function EquipmentDashboard() {
   const { theme, setTheme } = useTheme()
@@ -26,6 +26,8 @@ export default function EquipmentDashboard() {
     setFilters,
     setSelectedIds,
     clearSelection,
+    hierarchy,
+    setHierarchy,
   } = useEquipments()
 
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
@@ -162,7 +164,7 @@ export default function EquipmentDashboard() {
           <EquipmentFiltersComponent
             filters={filters}
             onFiltersChange={setFilters}
-            hierarchy={{ domains: {} }} // Hiérarchie vide pour l'instant
+            hierarchy={hierarchy}
             totalCount={equipments.length}
             filteredCount={equipments.length}
           />
@@ -185,10 +187,9 @@ export default function EquipmentDashboard() {
         onClose={() => setIsFormModalOpen(false)}
         onSubmit={handleFormSubmit}
         equipment={editingEquipment}
-        hierarchy={{ domains: {} }} // Hiérarchie vide pour l'instant
-        setHierarchy={function (value: SetStateAction<{ domains: Record<string, { types: Record<string, { categories: Record<string, { subCategories: string[] }> }> }> }>): void {
-          throw new Error("Function not implemented.")
-        } }      />
+        hierarchy={hierarchy}
+        setHierarchy={setHierarchy as React.Dispatch<React.SetStateAction<EquipmentHierarchy>>}
+      />  
 
       <DeleteConfirmationDialog
         isOpen={deleteDialog.isOpen}

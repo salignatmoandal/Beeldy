@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { EquipmentFilters, EquipmentHierarchy } from "@/types/equipment"
+import { useEquipmentStore } from "@/lib/stores/equipment-store"
 
 interface EquipmentFiltersProps {
   filters: EquipmentFilters
@@ -23,6 +24,13 @@ export function EquipmentFiltersComponent({
   filteredCount,
 }: EquipmentFiltersProps) {
   const [searchValue, setSearchValue] = useState(filters.search)
+  const [mounted, setMounted] = useState(false)
+  const { _hasHydrated } = useEquipmentStore()
+
+  // Gérer l'hydratation
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Debounce search
   useEffect(() => {
@@ -32,15 +40,15 @@ export function EquipmentFiltersComponent({
     return () => clearTimeout(timer)
   }, [searchValue])
 
-  const domains = Object.keys(hierarchy.domains)
-  const types = filters.domain ? Object.keys(hierarchy.domains[filters.domain]?.types || {}) : []
+  const domains = Object.keys(hierarchy?.domains || {})
+  const types = filters.domain ? Object.keys(hierarchy?.domains?.[filters.domain]?.types || {}) : []
   const categories =
     filters.domain && filters.type
-      ? Object.keys(hierarchy.domains[filters.domain]?.types[filters.type]?.categories || {})
+      ? Object.keys(hierarchy?.domains?.[filters.domain]?.types?.[filters.type]?.categories || {})
       : []
   const subCategories =
     filters.domain && filters.type && filters.category
-      ? hierarchy.domains[filters.domain]?.types[filters.type]?.categories[filters.category]?.subCategories || []
+      ? hierarchy?.domains?.[filters.domain]?.types?.[filters.type]?.categories?.[filters.category]?.subCategories || []
       : []
 
   const handleFilterChange = (key: keyof EquipmentFilters, value: string) => {
@@ -73,6 +81,23 @@ export function EquipmentFiltersComponent({
   }
 
   const hasActiveFilters = filters.search || filters.domain || filters.type || filters.category || filters.subCategory
+
+  // Ne pas rendre le composant jusqu'à ce que l'hydratation soit terminée
+  if (!mounted || !_hasHydrated) {
+    return (
+      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <div className="animate-pulse">
+          <div className="h-6 bg-gray-200 rounded w-24 mb-6"></div>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-11 bg-gray-200 rounded"></div>
+            ))}
+          </div>
+          <div className="mt-4 h-4 bg-gray-200 rounded w-48"></div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
@@ -161,15 +186,15 @@ export function EquipmentFiltersComponent({
 
         {/* Sub-Category Filter */}
         <Select
-          value={filters.subCategory}
+          value={filters.subCategory || "all-sub-categories"}
           onValueChange={(value: string) => handleFilterChange("subCategory", value)}
-          disabled={!filters.category}
+          disabled={!filters.category || subCategories.length === 0}
         >
           <SelectTrigger className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20">
-            <SelectValue placeholder="All Sub-Categories" />
+            <SelectValue placeholder="Toutes les sous-catégories" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all-sub-categories">All Sub-Categories</SelectItem>
+            <SelectItem value="all-sub-categories">Toutes les sous-catégories</SelectItem>
             {subCategories.map((subCategory: any) => (
               <SelectItem key={subCategory} value={subCategory}>
                 {subCategory}
