@@ -13,13 +13,13 @@ type Equipment struct {
 	Status string `gorm:"default:'active'" json:"status"` // ex: active, maintenance, retired
 
 	// Références hiérarchiques (type -> catégorie -> sous-catégorie)
-	Domain      string `json:"domain"`       // ex: LEVAGE
-	Type        string `json:"type"`         // ex: Ascenseur
-	Category    string `json:"category"`     // ex: Électrique
-	SubCategory string `json:"sub_category"` // ex: Traction
+	Domain      string `json:"domain"`      // ex: LEVAGE
+	Type        string `json:"type"`        // ex: Ascenseur
+	Category    string `json:"category"`    // ex: Électrique
+	SubCategory string `json:"subCategory"` // ex: Traction
 
 	// Pour la synchronisation offline
 	Synced    bool      `gorm:"default:false" json:"synced"`
-	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"`
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updatedAt"`
+	CreatedAt time.Time `gorm:"autoCreateTime" json:"createdAt"`
 }
