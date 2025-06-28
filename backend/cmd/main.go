@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/salignatmoandal/equipment-api/config"
@@ -27,6 +28,7 @@ func main() {
 
 	// Initialisation of the Gin router
 	r := gin.Default()
+	r.Use(cors.Default())
 
 	// Enregistrement des routes
 	routes.RegisterRoutes(r)
