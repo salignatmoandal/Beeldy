@@ -32,45 +32,30 @@ interface FormData {
   model: string
   status: Equipment["status"]
 }
-function enrichResultsToHierarchy(results: EnrichItem[]): {
-    domains: {
-      [domain: string]: {
-        types: {
-          [type: string]: {
-            categories: {
-              [category: string]: {
-                subCategories: string[]
-              }
-            }
-          }
-        }
-      }
+function enrichResultsToHierarchy(results: EnrichItem[]): EquipmentHierarchy {
+  const hierarchy: EquipmentHierarchy = { domains: {} }
+  results.forEach((item) => {
+    if (!item.domain) return
+    if (!hierarchy.domains[item.domain]) {
+      hierarchy.domains[item.domain] = { types: {} }
     }
-  } {
-    const hierarchy = { domains: {} as Record<string, any> }
-  
-    results.forEach((item) => {
-      if (!item.domain) return
-      if (!hierarchy.domains[item.domain]) {
-        hierarchy.domains[item.domain] = { types: {} }
-      }
-      if (!item.type) return
-      if (!hierarchy.domains[item.domain].types[item.type]) {
-        hierarchy.domains[item.domain].types[item.type] = { categories: {} }
-      }
-      if (!item.category) return
-      if (!hierarchy.domains[item.domain].types[item.type].categories[item.category]) {
-        hierarchy.domains[item.domain].types[item.type].categories[item.category] = { subCategories: [] }
-      }
-      if (
-        item.sub_category &&
-        !hierarchy.domains[item.domain].types[item.type].categories[item.category].subCategories.includes(item.sub_category)
-      ) {
-        hierarchy.domains[item.domain].types[item.type].categories[item.category].subCategories.push(item.sub_category)
-      }
-    })
-    return hierarchy
-  }
+    if (!item.type) return
+    if (!hierarchy.domains[item.domain].types[item.type]) {
+      hierarchy.domains[item.domain].types[item.type] = { categories: {} }
+    }
+    if (!item.category) return
+    if (!hierarchy.domains[item.domain].types[item.type].categories[item.category]) {
+      hierarchy.domains[item.domain].types[item.type].categories[item.category] = { subCategories: [] }
+    }
+    if (
+      item.sub_category &&
+      !hierarchy.domains[item.domain].types[item.type].categories[item.category].subCategories.includes(item.sub_category)
+    ) {
+      hierarchy.domains[item.domain].types[item.type].categories[item.category].subCategories.push(item.sub_category)
+    }
+  })
+  return hierarchy
+}
 
 export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hierarchy, setHierarchy }: EquipmentFormModalProps) {
   const [formData, setFormData] = useState<FormData>({
@@ -134,8 +119,13 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
       : []
   const subCategories =
     formData.domain && formData.type && formData.category
-      ? hierarchy.domains[formData.domain]?.types[formData.type]?.categories[formData.category]?.subCategories || []
+      ? hierarchy?.domains?.[formData.domain]?.types?.[formData.type]?.categories?.[formData.category]?.subCategories ?? []
       : []
+
+  console.log(
+    "subCategories = ",
+    hierarchy?.domains?.[formData.domain]?.types?.[formData.type]?.categories?.[formData.category]?.subCategories
+  )
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => {
@@ -309,13 +299,12 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
               <Select
                 value={formData.subCategory}
                 onValueChange={(value) => handleInputChange("subCategory", value)}
-                disabled={!formData.category}
+                disabled={!formData.category || subCategories.length === 0}
               >
-                <SelectTrigger className={errors.subCategory ? "border-red-500 focus:border-red-500" : ""}>
-                  <SelectValue placeholder="Select sub-category" />
+                <SelectTrigger>
+                  <SelectValue placeholder={subCategories.length === 0 ? "Aucune sous-catégorie" : "Select sub-category"} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all-sub-categories">Toutes les sous-catégories</SelectItem>
                   {subCategories.map((subCategory) => (
                     <SelectItem key={subCategory} value={subCategory}>
                       {subCategory}
@@ -323,6 +312,9 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
                   ))}
                 </SelectContent>
               </Select>
+              {subCategories.length === 0 && (
+                <p className="text-sm text-gray-500">Aucune sous-catégorie disponible pour cette catégorie.</p>
+              )}
               {errors.subCategory && <p className="text-sm text-red-600">{errors.subCategory}</p>}
             </div>
 
