@@ -61,3 +61,32 @@ All services are orchestrated with Docker Compose.
 ├── docker-compose.yml
 └── .env               # Environment variables for DB and services
 ```
+# Frontend Folder Structure 
+app/
+├── layout.tsx              # Layout principal (header, theme, etc.)
+├── page.tsx                # Page principale avec affichage des équipements
+├── globals.css             # Styles globaux (import Tailwind, custom CSS)
+
+components/
+├── equipment-table.tsx     # Table d'affichage des équipements
+├── equipment-form-modal.tsx# Modal de création/édition d’équipement
+├── equipment-filter.tsx    # Filtres de recherche par domaine, type, etc.
+├── search-input.tsx        # Barre de recherche
+├── pagination.tsx          # Pagination
+├── delete-confirmation-dialog.tsx # Confirmation de suppression
+└── ui/                     # Composants UI partagés (depuis ShadCN ou custom)
+    ├── button.tsx, input.tsx, dialog.tsx, etc.
+
+hook/
+├── use-equipments.ts       # Hook pour récupérer tous les équipements
+└── use-equipments-paginated.ts # Hook pour la pagination avec filtre/recherche
+
+lib/
+├── schemas/equipment.ts    # Zod schemas pour valider les données
+├── services/equipment-api.ts # Fonctions d’appel à l’API (GET, POST, etc.)
+├── stores/equipment-store.ts # Store Zustand pour l’état local des équipements
+└── utils.ts                # Fonctions utilitaires
+
+types/
+└── equipment.ts            # Types TypeScript liés aux équipements
+
