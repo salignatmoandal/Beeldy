@@ -17,7 +17,7 @@ This project is a modern microservices architecture for equipment management and
 | Stockage       | PostgreSQL (indexé + scalable)                 |
 | Format data    | JSON + CSV                                     |
 
-
+# Fonctionnalités principales 
 Fonctionnalités principales
 Filtres avancés (domaine, type, catégorie…)
 Pagination et recherche textuelle
@@ -68,7 +68,6 @@ All services are orchestrated with Docker Compose.
 └── .env               # Environment variables for DB and services
 ```
 # Frontend Folder Structure 
-```
 app/
 ├── layout.tsx              # Layout principal (header, theme, etc.)
 ├── page.tsx                # Page principale avec affichage des équipements
@@ -96,4 +95,34 @@ lib/
 
 types/
 └── equipment.ts            # Types TypeScript liés aux équipements
+
+# Docker 
 ```
+docker-compose up --build
+```
+
+## Run backend independently
+
+```
+cd Backend
+go run cmd/main.go
+```
+## Run the frontend
+```
+cd Frontend
+pnpm install
+pnpm dev
+```
+
+# Main API Endpoints
+
+| Method | Endpoint                    | Description                             |
+| ------ | --------------------------- | --------------------------------------- |
+| GET    | `/api/equipments`           | Legacy – get all equipment (unfiltered) |
+| GET    | `/api/equipments/paginated` | Paginated, filtered equipment list      |
+| POST   | `/api/equipments`           | Create new equipment                    |
+| PATCH  | `/api/equipments/:id`       | Update equipment                        |
+| DELETE | `/api/equipments/:id`       | Delete equipment                        |
+| POST   | `/api/equipments/enrich`    | Call AI service to enrich metadata      |
+
+
