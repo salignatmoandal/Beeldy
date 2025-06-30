@@ -125,4 +125,55 @@ pnpm dev
 | DELETE | `/api/equipments/:id`       | Delete equipment                        |
 | POST   | `/api/equipments/enrich`    | Call AI service to enrich metadata      |
 
+# CURL 
 
+```curl http://localhost:3000/api/equipments | jq```
+
+## Create Equipement (POST/api/equipements)
+```
+curl -X POST http://localhost:3000/api/equipments \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Ascenseur Z1000",
+    "brand": "Thyssenkrupp",
+    "model": "Z1000",
+    "status": "active",
+    "domain": "LEVAGE",
+    "type": "Ascenseur",
+    "category": "Électrique",
+    "sub_category": "Traction"
+  }'```
+
+## Lister tous les équipements (GET/api/equipments)
+
+```curl http://localhost:3000/api/equipments```
+
+## Voir une équipement par ID (GET/api/equipments:id)
+```curl http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb3a4473cb```
+
+## Update un équipement (PATCH/api/equiments/:id)
+
+```curl -X PATCH http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb3a4473cb \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "maintenance",
+    "model": "Z1200-PRO",
+    "type" : "Escalier"
+  }'
+```
+# Example AI Enrichment Request 
+
+
+```curl -X POST http://localhost:3000/api/equipments/enrich \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Ascenseur LX-Panorama", "top_k": 5}'
+```
+
+# PostgreSQL Optimization
+
+```CREATE INDEX CONCURRENTLY idx_equipment_created_at ON equipments(created_at DESC);
+CREATE INDEX CONCURRENTLY idx_equipment_domain ON equipments(domain);
+CREATE INDEX CONCURRENTLY idx_equipment_type ON equipments(type);
+CREATE INDEX CONCURRENTLY idx_equipment_category ON equipments(category);
+CREATE INDEX CONCURRENTLY idx_equipment_status ON equipments(status);
+```
