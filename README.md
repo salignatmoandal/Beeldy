@@ -67,7 +67,9 @@ All services are orchestrated with Docker Compose.
 ├── docker-compose.yml
 └── .env               # Environment variables for DB and services
 ```
-# Frontend Folder Structure 
+# Frontend Architecture 
+```
+
 app/
 ├── layout.tsx              # Layout principal (header, theme, etc.)
 ├── page.tsx                # Page principale avec affichage des équipements
@@ -95,6 +97,8 @@ lib/
 
 types/
 └── equipment.ts            # Types TypeScript liés aux équipements
+
+```
 
 # Docker 
 ```
@@ -125,11 +129,20 @@ pnpm dev
 | DELETE | `/api/equipments/:id`       | Delete equipment                        |
 | POST   | `/api/equipments/enrich`    | Call AI service to enrich metadata      |
 
-# CURL 
+# Swagger
+
+```
+http://127.0.0.1:8000/docs
+```
+
+# CURL FORMATTER
+
+
 
 ```curl http://localhost:3000/api/equipments | jq```
 
 ## Create Equipement (POST/api/equipements)
+
 ```
 curl -X POST http://localhost:3000/api/equipments \
   -H "Content-Type: application/json" \
@@ -142,16 +155,17 @@ curl -X POST http://localhost:3000/api/equipments \
     "type": "Ascenseur",
     "category": "Électrique",
     "sub_category": "Traction"
-  }'```
+  }'
+```
 
-## Lister tous les équipements (GET/api/equipments)
+## Get All Equipments  (GET/api/equipments)
 
 ```curl http://localhost:3000/api/equipments```
 
-## Voir une équipement par ID (GET/api/equipments:id)
+## Get Equipment by ID(GET/api/equipments:id)
 ```curl http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb3a4473cb```
 
-## Update un équipement (PATCH/api/equiments/:id)
+## Update equipment (PATCH/api/equiments/:id)
 
 ```curl -X PATCH http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb3a4473cb \
   -H "Content-Type: application/json" \
@@ -161,6 +175,13 @@ curl -X POST http://localhost:3000/api/equipments \
     "type" : "Escalier"
   }'
 ```
+
+# Delete Equipments
+```
+curl -X DELETE http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb3a4473cb
+```
+
+
 # Example AI Enrichment Request 
 
 
@@ -176,4 +197,13 @@ CREATE INDEX CONCURRENTLY idx_equipment_domain ON equipments(domain);
 CREATE INDEX CONCURRENTLY idx_equipment_type ON equipments(type);
 CREATE INDEX CONCURRENTLY idx_equipment_category ON equipments(category);
 CREATE INDEX CONCURRENTLY idx_equipment_status ON equipments(status);
+
+# Performance Backend
+
+```
+ab -n 2000 -c 20 "http://localhost:3000/api/equipments/paginated?page=1&pageSize=50" | jq
+```
+# Frontend Performance 
+```
+http://localhost:3000/api/equipments/paginated?page=2&pageSize=50
 ```
