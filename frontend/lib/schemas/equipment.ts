@@ -8,7 +8,7 @@ export const EquipmentBaseSchema = z.object({
   domain: z.string().min(1, "Domain is required"),
   type: z.string().min(1, "Type is required"),
   category: z.string().min(1, "Category is required"),
-  subCategory: z.string().min(1, "Sub-category is required"),
+  subCategory: z.string().optional(),
   brand: z.string().min(1, "Brand is required"),
   model: z.string().min(1, "Model is required"),
   status: EquipmentStatusSchema,

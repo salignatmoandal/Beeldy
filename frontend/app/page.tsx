@@ -1,14 +1,15 @@
 "use client"
 
-import { SetStateAction, useState } from "react"
+import { useState } from "react"
 import { Plus, Trash2, Moon, Sun, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTheme } from "next-themes"
-import { useEquipments } from "@/hook/use-equipments"
+import { useEquipmentsPaginated } from "@/hook/use-equipments-paginated"
 import { EquipmentFiltersComponent } from "@/components/equipment-filter"
 import { EquipmentTable } from "@/components/equipment-table"
 import { DeleteConfirmationDialog } from "@/components/delete-confirmation-dialog"
 import { EquipmentFormModal } from "@/components/equipment-form-modal"
+import { Pagination } from "@/components/pagination"
 import type { Equipment, EquipmentHierarchy } from "@/types/equipment"
 
 export default function EquipmentDashboard() {
@@ -17,18 +18,20 @@ export default function EquipmentDashboard() {
     equipments,
     loading,
     error,
+    pagination,
     filters,
-    selectedIds,
+    updateFilters,
+    goToPage,
     createEquipment,
     updateEquipment,
     deleteEquipment,
     deleteEquipments,
-    setFilters,
+    selectedIds,
     setSelectedIds,
     clearSelection,
     hierarchy,
     setHierarchy,
-  } = useEquipments()
+  } = useEquipmentsPaginated()
 
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
   const [editingEquipment, setEditingEquipment] = useState<Equipment | null>(null)
@@ -59,7 +62,7 @@ export default function EquipmentDashboard() {
       } else {
         await createEquipment(equipmentData)
       }
-      clearSelection() // Effacer la sélection après une opération réussie
+      clearSelection()
       setIsFormModalOpen(false)
     } catch (error) {
       // L'erreur est déjà gérée dans le hook
@@ -160,16 +163,16 @@ export default function EquipmentDashboard() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-6">
-          {/* Filters */}
+          {/* Filtres */}
           <EquipmentFiltersComponent
             filters={filters}
-            onFiltersChange={setFilters}
+            onFiltersChange={updateFilters}
             hierarchy={hierarchy}
-            totalCount={equipments.length}
+            totalCount={pagination.total}
             filteredCount={equipments.length}
           />
 
-          {/* Table */}
+          {/* Tableau */}
           <EquipmentTable
             equipments={equipments}
             loading={loading}
@@ -177,6 +180,15 @@ export default function EquipmentDashboard() {
             onSelectionChange={setSelectedIds}
             onEdit={handleEditEquipment}
             onDelete={handleDeleteSingle}
+          />
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={pagination.page}
+            totalPages={pagination.totalPages}
+            totalItems={pagination.total}
+            pageSize={pagination.pageSize}
+            onPageChange={goToPage}
           />
         </div>
       </main>
