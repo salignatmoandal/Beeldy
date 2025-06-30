@@ -102,6 +102,7 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
     if (formData.name && formData.name.length > 2) {
       EquipmentAPI.enrichEquipment(formData.name)
         .then((result) => {
+          console.log("Résultat enrichissement IA:", result);
           const hierarchy = enrichResultsToHierarchy(result?.results || [])
           setHierarchy(hierarchy)
         })
@@ -112,10 +113,10 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
   }, [formData.name, setHierarchy])
 
   const domains = Object.keys(hierarchy?.domains || {})
-  const types = formData.domain ? Object.keys(hierarchy.domains[formData.domain]?.types || {}) : []
+  const types = formData.domain ? Object.keys(hierarchy?.domains?.[formData.domain]?.types || {}) : []
   const categories =
     formData.domain && formData.type
-      ? Object.keys(hierarchy.domains[formData.domain]?.types[formData.type]?.categories || {})
+      ? Object.keys(hierarchy?.domains?.[formData.domain]?.types?.[formData.type]?.categories || {})
       : []
   const subCategories =
     formData.domain && formData.type && formData.category

@@ -17,7 +17,3 @@ export function useOnlineStatus() {
   return isOnline;
 }
 
-// Dans ton composant :
-const isOnline = useOnlineStatus();
-// Remove example usage since this is a hook file
-
