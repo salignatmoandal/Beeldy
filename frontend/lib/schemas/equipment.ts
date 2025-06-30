@@ -1,33 +1,33 @@
 import { z } from "zod"
 
-// Schémas de base compatibles avec votre modèle Go
+// Base schemas compatible with your Go model
 export const EquipmentStatusSchema = z.enum(["active", "maintenance", "inactive"])
 
 export const EquipmentBaseSchema = z.object({
-  name: z.string().min(1, "Le nom est requis"),
-  domain: z.string().min(1, "Le domaine est requis"),
-  type: z.string().min(1, "Le type est requis"),
-  category: z.string().min(1, "La catégorie est requise"),
-  subCategory: z.string().min(1, "La sous-catégorie est requise"),
-  brand: z.string().min(1, "La marque est requise"),
-  model: z.string().min(1, "Le modèle est requis"),
+  name: z.string().min(1, "Name is required"),
+  domain: z.string().min(1, "Domain is required"),
+  type: z.string().min(1, "Type is required"),
+  category: z.string().min(1, "Category is required"),
+  subCategory: z.string().min(1, "Sub-category is required"),
+  brand: z.string().min(1, "Brand is required"),
+  model: z.string().min(1, "Model is required"),
   status: EquipmentStatusSchema,
 })
 
-// Schéma pour la création (sans id et timestamps)
+// Schema for creation (without id and timestamps)
 export const CreateEquipmentSchema = EquipmentBaseSchema
 
-// Schéma pour la mise à jour (tous les champs optionnels)
+// Schema for update (all fields optional)
 export const UpdateEquipmentSchema = EquipmentBaseSchema.partial()
 
-// Schéma complet avec id et timestamps (compatible avec votre modèle Go)
+// Schema with id and timestamps 
 export const EquipmentSchema = EquipmentBaseSchema.extend({
   id: z.string().uuid(),
-  createdAt: z.string(), // Votre backend Go renvoie des timestamps en string
+  createdAt: z.string(), //  Go returns timestamps as string
   updatedAt: z.string(),
 })
 
-// Schémas pour les filtres et la hiérarchie
+// Schemas for filters and hierarchy
 export const EquipmentFiltersSchema = z.object({
   search: z.string().default(""),
   domain: z.string().default(""),
@@ -46,7 +46,7 @@ export const EquipmentHierarchySchema = z.object({
   }))
 })
 
-// Types TypeScript dérivés des schémas
+// Types TypeScript derived from schemas
 export type Equipment = z.infer<typeof EquipmentSchema>
 export type CreateEquipment = z.infer<typeof CreateEquipmentSchema>
 export type UpdateEquipment = z.infer<typeof UpdateEquipmentSchema>
