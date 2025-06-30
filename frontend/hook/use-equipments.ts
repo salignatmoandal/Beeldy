@@ -5,7 +5,6 @@ import type { CreateEquipment, UpdateEquipment, EquipmentFilters } from "@/lib/s
 
 export function useEquipments() {
   const {
-    equipments,
     loading,
     error,
     filters,

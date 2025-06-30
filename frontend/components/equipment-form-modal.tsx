@@ -78,7 +78,7 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
         domain: equipment.domain,
         type: equipment.type,
         category: equipment.category,
-        subCategory: equipment.subCategory,
+        subCategory: equipment.subCategory || "",
         brand: equipment.brand,
         model: equipment.model,
         status: equipment.status,
@@ -159,9 +159,12 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
     if (!formData.domain) newErrors.domain = "Domain is required"
     if (!formData.type) newErrors.type = "Type is required"
     if (!formData.category) newErrors.category = "Category is required"
-    if (!formData.subCategory) newErrors.subCategory = "Sub-category is required"
     if (!formData.brand.trim()) newErrors.brand = "Brand is required"
     if (!formData.model.trim()) newErrors.model = "Model is required"
+
+    if (subCategories.length > 0 && !formData.subCategory) {
+      newErrors.subCategory = "Sub-category is required"
+    }
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -172,10 +175,9 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
 
     if (!validateForm()) return
 
-    if (!formData.subCategory) {
-      // Show user error
+    if (subCategories.length > 0 && !formData.subCategory) {
       alert("Please select a sub-category")
-      return;
+      return
     }
 
     setLoading(true)
@@ -297,9 +299,10 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
             <div className="space-y-2">
               <Label htmlFor="subCategory">Sub-Category *</Label>
               <Select
-                value={formData.subCategory}
+                value={formData.subCategory || ""}
                 onValueChange={(value) => handleInputChange("subCategory", value)}
                 disabled={!formData.category || subCategories.length === 0}
+                required={subCategories.length > 0}
               >
                 <SelectTrigger>
                   <SelectValue placeholder={subCategories.length === 0 ? "Aucune sous-catégorie" : "Select sub-category"} />
@@ -313,7 +316,9 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
                 </SelectContent>
               </Select>
               {subCategories.length === 0 && (
-                <p className="text-sm text-gray-500">Aucune sous-catégorie disponible pour cette catégorie.</p>
+                <span className="text-gray-500 text-xs">
+                  Aucune sous-catégorie disponible pour cette catégorie.
+                </span>
               )}
               {errors.subCategory && <p className="text-sm text-red-600">{errors.subCategory}</p>}
             </div>

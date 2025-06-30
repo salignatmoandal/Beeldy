@@ -28,6 +28,27 @@ async function handleResponse<T>(response: Response): Promise<T> {
   return response.json()
 }
 
+export interface PaginationParams {
+  page: number
+  pageSize: number
+  search?: string
+  domain?: string
+  type?: string
+  category?: string
+  subCategory?: string
+  status?: string
+}
+
+export interface PaginatedResponse<T> {
+  data: T[]
+  pagination: {
+    page: number
+    pageSize: number
+    total: number
+    totalPages: number
+  }
+}
+
 export class EquipmentAPI {
   // Get all equipments
   static async getAllEquipments(): Promise<Equipment[]> {
@@ -112,5 +133,26 @@ export class EquipmentAPI {
     });
     if (!response.ok) throw new Error("Erreur enrichissement");
     return response.json();
+  }
+
+  static async getEquipmentsPaginated(params: PaginationParams): Promise<PaginatedResponse<Equipment>> {
+    const searchParams = new URLSearchParams({
+      page: params.page.toString(),
+      pageSize: params.pageSize.toString(),
+      ...(params.search && { search: params.search }),
+      ...(params.domain && { domain: params.domain }),
+      ...(params.type && { type: params.type }),
+      ...(params.category && { category: params.category }),
+      ...(params.subCategory && { sub_category: params.subCategory }),
+      ...(params.status && { status: params.status }),
+    })
+    
+    const response = await fetch(`${API_BASE_URL}/equipments/paginated?${searchParams}`)
+    const data = await handleResponse<PaginatedResponse<Equipment>>(response)
+    
+    return {
+      data: data.data.map(equipment => EquipmentSchema.parse(equipment)),
+      pagination: data.pagination
+    }
   }
 }
