@@ -68,6 +68,7 @@ All services are orchestrated with Docker Compose.
 └── .env               # Environment variables for DB and services
 ```
 # Frontend Folder Structure 
+```
 app/
 ├── layout.tsx              # Layout principal (header, theme, etc.)
 ├── page.tsx                # Page principale avec affichage des équipements
@@ -95,4 +96,4 @@ lib/
 
 types/
 └── equipment.ts            # Types TypeScript liés aux équipements
-
+```
