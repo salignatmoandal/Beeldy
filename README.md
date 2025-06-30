@@ -7,6 +7,18 @@ This project is a modern microservices architecture for equipment management and
 - PostgreSQL: Relational database for persistent storage
 - Docker Compose: Unified orchestration for local development
 
+| Composant      | Stack                                          |
+| -------------- | ---------------------------------------------- |
+| API principale | Go + Gin + Gorm + PostgreSQL                   |
+| IA enrichie    | Python + FastAPI + FAISS + SentenceTransformer |
+| Frontend       | Next.js + ShadCN + Zustand                     |
+| Orchestration  | Docker + docker-compose                        |
+| CI/CD          | GitHub Actions (lint, test, Trivy, build)      |
+| Stockage       | PostgreSQL (indexé + scalable)                 |
+| Format data    | JSON + CSV                                     |
+
+
+
 # Architecture Diagram 
 ```
 +-------------------+         +-------------------+         +-------------------+
@@ -29,7 +41,7 @@ The Python service exposes an /enrich endpoint for AI-powered enrichment.
 The backend communicates with the ML service via HTTP and with PostgreSQL for data persistence.
 All services are orchestrated with Docker Compose.
 
-# Folder Structure
+#  Backend Folder Structure
 ```
 .
 ├── backend/           # Go backend API
