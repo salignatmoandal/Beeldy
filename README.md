@@ -129,7 +129,7 @@ pnpm dev
 | DELETE | `/api/equipments/:id`       | Delete equipment                        |
 | POST   | `/api/equipments/enrich`    | Call AI service to enrich metadata      |
 
-# Swagger
+# Swagger UI - EndPoint MicroService ML|AI
 
 ```
 http://127.0.0.1:8000/docs
