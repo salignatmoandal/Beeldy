@@ -18,6 +18,12 @@ This project is a modern microservices architecture for equipment management and
 | Format data    | JSON + CSV                                     |
 
 
+Fonctionnalités principales
+Filtres avancés (domaine, type, catégorie…)
+Pagination et recherche textuelle
+Création, édition, suppression d’équipements
+Enrichissement IA (suggestions intelligentes)
+Backend optimisé pour les gros volumes de données
 
 # Architecture Diagram 
 ```
