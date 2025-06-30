@@ -123,10 +123,10 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
       ? hierarchy?.domains?.[formData.domain]?.types?.[formData.type]?.categories?.[formData.category]?.subCategories ?? []
       : []
 
-  console.log(
-    "subCategories = ",
-    hierarchy?.domains?.[formData.domain]?.types?.[formData.type]?.categories?.[formData.category]?.subCategories
-  )
+  // console.log(
+  //   "subCategories = ",
+  //   hierarchy?.domains?.[formData.domain]?.types?.[formData.type]?.categories?.[formData.category]?.subCategories
+  // )
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => {
