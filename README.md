@@ -138,7 +138,6 @@ http://127.0.0.1:8000/docs
 # CURL FORMATTER
 
 
-
 ```curl http://localhost:3000/api/equipments | jq```
 
 ## Create Equipement (POST/api/equipements)
@@ -198,8 +197,8 @@ CREATE INDEX CONCURRENTLY idx_equipment_type ON equipments(type);
 CREATE INDEX CONCURRENTLY idx_equipment_category ON equipments(category);
 CREATE INDEX CONCURRENTLY idx_equipment_status ON equipments(status);
 
-# Performance Backend
-
+```
+#  How to evaluate the Performance of the Backend 
 ```
 ab -n 2000 -c 20 "http://localhost:3000/api/equipments/paginated?page=1&pageSize=50" | jq
 ```
