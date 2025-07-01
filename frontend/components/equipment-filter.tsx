@@ -82,7 +82,7 @@ export function EquipmentFiltersComponent({
 
   const hasActiveFilters = filters.search || filters.domain || filters.type || filters.category || filters.subCategory
 
-  // Ne pas rendre le composant jusqu'à ce que l'hydratation soit terminée
+  
   if (!mounted || !_hasHydrated) {
     return (
       <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
@@ -191,10 +191,10 @@ export function EquipmentFiltersComponent({
           disabled={!filters.category || subCategories.length === 0}
         >
           <SelectTrigger className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20">
-            <SelectValue placeholder="Toutes les sous-catégories" />
+            <SelectValue placeholder="All sub-categories" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all-sub-categories">Toutes les sous-catégories</SelectItem>
+            <SelectItem value="all-sub-categories">All sub-categories</SelectItem>
             {subCategories.map((subCategory: any) => (
               <SelectItem key={subCategory} value={subCategory}>
                 {subCategory}

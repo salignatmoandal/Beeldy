@@ -45,7 +45,7 @@ export function SoonerStatusBanner() {
             ring-2 ring-white
           `}
         />
-        {isOnline ? "Connecté à Internet" : "Hors ligne"}
+        {isOnline ? "Connected to Internet" : "Offline"}
       </div>
     </div>
   );

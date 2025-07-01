@@ -29,7 +29,7 @@ export function useOfflineSync() {
             console.log("Réponse API suppression :", res);
           }
         } catch (e) {
-          // Gestion d'erreur 
+          // Error handling
           console.error("Erreur lors de la synchronisation offline :", e);
         }
       }
@@ -38,12 +38,12 @@ export function useOfflineSync() {
     }
 
     function handleOnline() {
-      console.log("Je suis de retour en ligne !");
+      console.log("I'm back online !");
       syncQueue();
     }
 
     window.addEventListener("online", handleOnline);
-    // Synchronise aussi au montage si déjà online
+    // Synchronize also at mount if already online
     if (navigator.onLine) {
       syncQueue();
     }

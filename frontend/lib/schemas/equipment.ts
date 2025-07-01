@@ -3,6 +3,7 @@ import { z } from "zod"
 // Base schemas compatible with your Go model
 export const EquipmentStatusSchema = z.enum(["active", "maintenance", "inactive"])
 
+// Base schema for equipment
 export const EquipmentBaseSchema = z.object({
   name: z.string().min(1, "Name is required"),
   domain: z.string().min(1, "Domain is required"),
@@ -36,6 +37,7 @@ export const EquipmentFiltersSchema = z.object({
   subCategory: z.string().default(""),
 })
 
+// Schema for equipment hierarchy
 export const EquipmentHierarchySchema = z.object({
   domains: z.record(z.string(), z.object({
     types: z.record(z.string(), z.object({

@@ -65,8 +65,8 @@ export default function EquipmentDashboard() {
       clearSelection()
       setIsFormModalOpen(false)
     } catch (error) {
-      // L'erreur est déjà gérée dans le hook
-      console.error("Erreur lors de la soumission:", error)
+      // The error is already handled in the hook
+      console.error("Error during submission:", error)
     }
   }
 
@@ -96,8 +96,8 @@ export default function EquipmentDashboard() {
       }
       setDeleteDialog({ ...deleteDialog, isOpen: false })
     } catch (error) {
-      // L'erreur est déjà gérée dans le hook
-      console.error("Erreur lors de la suppression:", error)
+      // The error is already handled in the hook
+      console.error("Error during deletion:", error)
     }
   }
 
@@ -124,8 +124,8 @@ export default function EquipmentDashboard() {
                 <Menu className="h-5 w-5" />
               </Button>
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">Gestion des Équipements</h1>
-                <p className="text-sm text-gray-600">Gérez votre inventaire d'équipements techniques</p>
+                <h1 className="text-xl font-semibold text-gray-900">Equipment Management</h1>
+                <p className="text-sm text-gray-600">Manage your inventory of technical equipments</p>
               </div>
             </div>
 
@@ -147,13 +147,13 @@ export default function EquipmentDashboard() {
                   className="text-red-600 border-red-200 hover:bg-red-50 bg-transparent"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
-                  Supprimer ({selectedIds.length})
+                  Delete ({selectedIds.length})
                 </Button>
               )}
 
               <Button onClick={handleAddEquipment} className="bg-blue-600 hover:bg-blue-700">
                 <Plus className="h-4 w-4 mr-2" />
-                Ajouter un Équipement
+                Add an Equipment
               </Button>
             </div>
           </div>
@@ -210,8 +210,8 @@ export default function EquipmentDashboard() {
         title={deleteDialog.type === "single" ? "Supprimer l'Équipement" : `Supprimer ${selectedIds.length} Équipements`}
         description={
           deleteDialog.type === "single"
-            ? `Êtes-vous sûr de vouloir supprimer "${deleteDialog.equipmentName}" ? Cette action ne peut pas être annulée.`
-            : `Êtes-vous sûr de vouloir supprimer ${selectedIds.length} équipements sélectionnés ? Cette action ne peut pas être annulée.`
+            ? `Are you sure you want to delete "${deleteDialog.equipmentName}" ? This action cannot be undone.`
+            : `Are you sure you want to delete ${selectedIds.length} selected equipments ? This action cannot be undone.`
         }
       />
     </div>
