@@ -17,13 +17,19 @@ This project is a modern microservices architecture for equipment management and
 | Stockage       | PostgreSQL (indexé + scalable)                 |
 | Format data    | JSON + CSV                                     |
 
-# Fonctionnalités principales 
-Fonctionnalités principales
-Filtres avancés (domaine, type, catégorie…)
-Pagination et recherche textuelle
-Création, édition, suppression d’équipements
-Enrichissement IA (suggestions intelligentes)
-Backend optimisé pour les gros volumes de données
+# Core feature
+
+- Advanced Filters
+  Filter equipments by domain, type, category, and more using dynamic dropdowns.
+- Full-Text Search & Pagination
+  Quickly search equipment by name or description with server-side pagination for performance.
+- CRUD Operations
+Create, read, update, and delete equipment records with validation and user-friendly modals.
+- AI-Powered Enrichment
+Smart suggestions (e.g., category, type) using machine learning models based on equipment names or metadata.
+- High-Performance Backend
+Optimized for large datasets with PostgreSQL indexing, Redis caching, and scalable architecture.
+
 
 # Architecture Diagram 
 ```
@@ -115,7 +121,7 @@ go run cmd/main.go
 ```
 cd Frontend
 pnpm install
-pnpm dev
+pnpm run dev
 ```
 
 # Main API Endpoints
@@ -136,7 +142,6 @@ http://127.0.0.1:8000/docs
 ```
 
 # CURL FORMATTER
-
 
 ```curl http://localhost:3000/api/equipments | jq```
 
@@ -189,7 +194,7 @@ curl -X DELETE http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb
 ```
 
 # PostgreSQL Optimization
-
+_Creating indexes in PostgreSQL helps speed up read-heavy operations by allowing the database to quickly locate rows without scanning the entire table._
 ```CREATE INDEX CONCURRENTLY idx_equipment_created_at ON equipments(created_at DESC);
 CREATE INDEX CONCURRENTLY idx_equipment_domain ON equipments(domain);
 CREATE INDEX CONCURRENTLY idx_equipment_type ON equipments(type);
@@ -205,3 +210,13 @@ ab -n 2000 -c 20 "http://localhost:3000/api/equipments/paginated?page=1&pageSize
 ```
 http://localhost:3000/api/equipments/paginated?page=2&pageSize=50
 ```
+
+# Backend & ML Microservice – Improvements 
+## Backend (Go) – Optimizations
+- Add Redis Caching (to reduce response times and avoid unnecssary database or ML service calls)
+- Asynchronous Processing via Queue (To avoid blocking the API during long-running tasks like ML inference)
+- gRPC architecture (High performance, binary protocol, faster than JSON/REST + Strong typing with `.proto`
+
+## ML Resut Caching 
+- Inter-service communication (gRPC) 
+- ML result caching (using Redis in order to store recent analysis result with TTL, supports parallel processing via multiple worker or containers) 
