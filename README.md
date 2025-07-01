@@ -140,7 +140,7 @@ http://127.0.0.1:8000/docs
 
 ```curl http://localhost:3000/api/equipments | jq```
 
-## Create Equipement (POST/api/equipements)
+### Create Equipement (POST/api/equipements)
 
 ```
 curl -X POST http://localhost:3000/api/equipments \
@@ -157,14 +157,14 @@ curl -X POST http://localhost:3000/api/equipments \
   }'
 ```
 
-## Get All Equipments  (GET/api/equipments)
+### Get All Equipments  (GET/api/equipments)
 
 ```curl http://localhost:3000/api/equipments```
 
-## Get Equipment by ID(GET/api/equipments:id)
+### Get Equipment by ID(GET/api/equipments:id)
 ```curl http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb3a4473cb```
 
-## Update equipment (PATCH/api/equiments/:id)
+### Update equipment (PATCH/api/equiments/:id)
 
 ```curl -X PATCH http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb3a4473cb \
   -H "Content-Type: application/json" \
@@ -175,14 +175,13 @@ curl -X POST http://localhost:3000/api/equipments \
   }'
 ```
 
-# Delete Equipments
+### Delete Equipments
 ```
 curl -X DELETE http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb3a4473cb
 ```
 
 
 # Example AI Enrichment Request 
-
 
 ```curl -X POST http://localhost:3000/api/equipments/enrich \
   -H "Content-Type: application/json" \
