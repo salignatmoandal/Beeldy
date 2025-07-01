@@ -84,6 +84,7 @@ func DeleteEquipment(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"deleted": true})
 }
 
+// POST /api/equipments/enrich
 func EnrichEquipment(c *gin.Context) {
 	var req struct {
 		Name string `json:"name"`
@@ -128,7 +129,7 @@ func GetEquipmentsPaginated(c *gin.Context) {
 
 	query := config.DB.Model(&models.Equipment{})
 
-	// Appliquer les filtres
+	// Apply filters
 	if search != "" {
 		query = query.Where("name ILIKE ? OR brand ILIKE ? OR model ILIKE ?",
 			"%"+search+"%", "%"+search+"%", "%"+search+"%")
@@ -149,10 +150,10 @@ func GetEquipmentsPaginated(c *gin.Context) {
 		query = query.Where("status = ?", status)
 	}
 
-	// Compter le total d'équipements (avec les filtres appliqués)
+	// Count the total equipments (with the applied filters)
 	query.Count(&total)
 
-	// Pagination avec tri par date de création (le plus récent en premier)
+	// Pagination with creation date sorting (the most recent first)
 	offset := (page - 1) * pageSize
 	result := query.Offset(offset).Limit(pageSize).Order("created_at DESC").Find(&equipments)
 
@@ -161,10 +162,10 @@ func GetEquipmentsPaginated(c *gin.Context) {
 		return
 	}
 
-	// Calculer le nombre total de pages
+	// Calculate the total number of pages
 	totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
 
-	// Retourner la réponse paginée
+	// Return the paginated response
 	c.JSON(http.StatusOK, gin.H{
 		"data": equipments,
 		"pagination": gin.H{
