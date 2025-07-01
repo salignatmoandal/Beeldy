@@ -38,7 +38,7 @@ export function EquipmentTable({
   const [mounted, setMounted] = useState(false)
   const { _hasHydrated } = useEquipmentStore()
 
-  // Gérer l'hydratation
+  // Handle the hydration
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -56,8 +56,8 @@ export function EquipmentTable({
     const aValue = a[sortField]
     const bValue = b[sortField]
 
-    if (aValue < bValue) return sortDirection === "asc" ? -1 : 1
-    if (aValue > bValue) return sortDirection === "asc" ? 1 : -1
+    if (aValue && bValue && aValue < bValue) return sortDirection === "asc" ? -1 : 1
+    if (aValue && bValue && aValue > bValue) return sortDirection === "asc" ? 1 : -1
     return 0
   })
 
