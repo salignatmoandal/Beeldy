@@ -8,9 +8,9 @@ export function SoonerStatusBanner() {
 
   useEffect(() => {
     if (!isOnline) {
-      setVisible(true); // Affiche immédiatement si offline
+      setVisible(true); // Show immediately if offline
     } else {
-      // Disparait après 3 secondes si online
+      // Disappear after 3 seconds if online
       const timer = setTimeout(() => setVisible(false), 3000);
       return () => clearTimeout(timer);
     }
