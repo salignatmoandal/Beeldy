@@ -211,7 +211,7 @@ CREATE INDEX CONCURRENTLY idx_equipment_category ON equipments(category);
 CREATE INDEX CONCURRENTLY idx_equipment_status ON equipments(status);
 
 ```
-#  How to evaluate the Performance of the Backend 
+### How to evaluate the Performance of the Backend 
 ```
 ab -n 2000 -c 20 "http://localhost:3000/api/equipments/paginated?page=1&pageSize=50" | jq
 ```
