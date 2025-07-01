@@ -1,4 +1,4 @@
-# Beeldi Test – Microservices Architecture
+# Beeldi Test – Equipment Management 
 
 This project is a modern microservices architecture for equipment management and enrichment, built with:
 
