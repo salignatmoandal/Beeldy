@@ -34,7 +34,7 @@ export function useOfflineSync() {
         }
       }
       await clearOfflineQueue();
-      // Optionnel : affiche un toast ou un message de succès
+      
     }
 
     function handleOnline() {

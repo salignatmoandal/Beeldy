@@ -1,7 +1,7 @@
 import { EquipmentSchema, CreateEquipmentSchema, UpdateEquipmentSchema } from "@/lib/schemas/equipment"
 import type { Equipment, CreateEquipment, UpdateEquipment } from "@/lib/schemas/equipment"
 
-// URL of the backend Go (port 3000 as configured in your main.go)
+// URL of the backend Go (port 3000 as configured in main.go)
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api"
 
 class EquipmentAPIError extends Error {
@@ -55,11 +55,11 @@ export class EquipmentAPI {
     const response = await fetch(`${API_BASE_URL}/equipments`)
     const data = await handleResponse<Equipment[]>(response)
     
-    // Validation avec Zod
+    // Validation with Zod
     return data.map(equipment => EquipmentSchema.parse(equipment))
   }
   
-  // Récupérer un équipement par ID
+  // Get an equipment by ID
   static async getEquipmentById(id: string): Promise<Equipment> {
     const response = await fetch(`${API_BASE_URL}/equipments/${id}`)
     const data = await handleResponse<Equipment>(response)
@@ -67,7 +67,7 @@ export class EquipmentAPI {
     return EquipmentSchema.parse(data)
   }
   
-  // Créer un équipement
+  // Create an equipment
   static async createEquipment(equipmentData: CreateEquipment): Promise<Equipment> {
     // Validation avant envoi
     const validatedData = CreateEquipmentSchema.parse(equipmentData)
@@ -84,7 +84,7 @@ export class EquipmentAPI {
     return EquipmentSchema.parse(data)
   }
   
-  // Mettre à jour un équipement
+  // Update an equipment
   static async updateEquipment(id: string, equipmentData: UpdateEquipment): Promise<Equipment> {
     // Validation avant envoi
     const validatedData = UpdateEquipmentSchema.parse(equipmentData)
@@ -101,7 +101,7 @@ export class EquipmentAPI {
     return EquipmentSchema.parse(data)
   }
   
-  // Supprimer un équipement
+  // Delete an equipment
   static async deleteEquipment(id: string): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/equipments/${id}`, {
       method: "DELETE",
@@ -110,21 +110,14 @@ export class EquipmentAPI {
     await handleResponse(response)
   }
   
-  // Supprimer plusieurs équipements (à implémenter dans votre backend Go si nécessaire)
+  // Delete multiple equipments 
   static async deleteEquipments(ids: string[]): Promise<void> {
-    // Pour l'instant, on supprime un par un
+    // For the moment, we delete one by one
     await Promise.all(ids.map(id => this.deleteEquipment(id)))
   }
   
-  // Récupérer la hiérarchie (à implémenter dans votre backend Go si nécessaire)
-  static async getHierarchy(): Promise<any> {
-    // Pour l'instant, on retourne une hiérarchie vide
-    // Vous pouvez implémenter cette route dans votre backend Go
-    return {
-      domains: {}
-    }
-  }
 
+  // Enrich an equipment
   static async enrichEquipment(name: string, topK: number = 3): Promise<any> {
     const response = await fetch(`${API_BASE_URL}/equipments/enrich`, {
       method: "POST",
@@ -135,6 +128,7 @@ export class EquipmentAPI {
     return response.json();
   }
 
+  // Get equipments paginated
   static async getEquipmentsPaginated(params: PaginationParams): Promise<PaginatedResponse<Equipment>> {
     const searchParams = new URLSearchParams({
       page: params.page.toString(),
