@@ -22,9 +22,10 @@ export function useEquipmentsPaginated() {
     status: ""
   })
 
-  // Sélection
+  // Selection
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const clearSelection = () => setSelectedIds([])
+
   const [hierarchy, setHierarchy] = useState<any>(null)
 
   // CRUD
