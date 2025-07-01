@@ -10,13 +10,13 @@ interface EquipmentState {
   loading: boolean
   error: string | null
   
-  // Filtres
+  // Filters
   filters: EquipmentFilters
   
-  // Sélection
+  // Selection
   selectedIds: string[]
   
-  // État d'hydratation
+  // Hydration state
   _hasHydrated: boolean
   
   // Actions

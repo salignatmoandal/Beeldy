@@ -6,7 +6,7 @@ export function OnlineStatusBanner() {
 
   return (
     <div>
-      {!isOnline && <div className="bg-yellow-200 p-2">Mode hors-ligne</div>}
+      {!isOnline && <div className="bg-yellow-200 p-2">Mode Offline</div>}
     </div>
   );
 }

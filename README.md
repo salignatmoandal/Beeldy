@@ -219,7 +219,8 @@ ab -n 2000 -c 20 "http://localhost:3000/api/equipments/paginated?page=1&pageSize
 ```
 http://localhost:3000/api/equipments/paginated?page=2&pageSize=50
 ```
-
+# FrontEnd - Improvements
+- Lazy Loading & Code Splitting
 
 
 # Backend & ML Microservice – Improvements 
