@@ -193,7 +193,7 @@ curl -X DELETE http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb
   -d '{"name": "Ascenseur LX-Panorama", "top_k": 5}'
 ```
 
-## Performance with Large Datasets
+# Performance with Large Datasets
 
 The application is designed to efficiently handle large volumes of data (100,000+ equipments) thanks to several optimizations:
 
@@ -202,7 +202,7 @@ The application is designed to efficiently handle large volumes of data (100,000
 - **Optimized Queries:** All queries are written to leverage indexes and avoid unnecessary full table scans.
 - **Scalability:** The architecture allows for horizontal scaling of both the backend and the database.
 
-# PostgreSQL Optimization
+## PostgreSQL Optimization
 
 ```CREATE INDEX CONCURRENTLY idx_equipment_created_at ON equipments(created_at DESC);
 CREATE INDEX CONCURRENTLY idx_equipment_domain ON equipments(domain);
