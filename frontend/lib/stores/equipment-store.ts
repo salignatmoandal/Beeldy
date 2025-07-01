@@ -115,7 +115,7 @@ export const useEquipmentStore = create<EquipmentState>()(
           }))
         },
         
-        // Actions pour l'état de chargement
+        // Actions for loading state
         setLoading: (loading) => set({ loading }),
         setError: (error) => set({ error }),
         
@@ -127,7 +127,7 @@ export const useEquipmentStore = create<EquipmentState>()(
         
         resetFilters: () => set({ filters: initialFilters }),
         
-        // Actions pour la sélection
+        // Actions for selection
         setSelectedIds: (selectedIds) => set({ selectedIds }),
         
         toggleSelection: (id) => {
@@ -143,10 +143,10 @@ export const useEquipmentStore = create<EquipmentState>()(
         
         clearSelection: () => set({ selectedIds: [] }),
         
-        // Actions d'hydratation
+        // Actions of hydration
         setHasHydrated: (hasHydrated) => set({ _hasHydrated: hasHydrated }),
         
-        // Getters calculés
+        // Getters calculated
         getFilteredEquipments: () => {
           const { equipments, filters } = get()
           
