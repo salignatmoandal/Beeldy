@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { getOfflineQueue, clearOfflineQueue } from "@/lib/offlineStorage";
-import { EquipmentAPI } from "@/lib/services/equiment-api"; // adapte le chemin si besoin
+import { EquipmentAPI } from "@/lib/services/equiment-api"; 
 
 export function useOfflineSync() {
   useEffect(() => {
@@ -18,9 +18,18 @@ export function useOfflineSync() {
             const res = await EquipmentAPI.createEquipment(action.data);
             console.log("Réponse API création :", res);
           }
-          // Ajoute ici d'autres types d'actions si besoin (update, delete, etc.)
+          if (action.type === "update") {
+            console.log("Synchronisation offline : mise à jour", action.data);
+            const res = await EquipmentAPI.updateEquipment(action.data.id, action.data);
+            console.log("Réponse API mise à jour :", res);
+          }
+          if (action.type === "delete") {
+            console.log("Synchronisation offline : suppression", action.data);
+            const res = await EquipmentAPI.deleteEquipment(action.data.id);
+            console.log("Réponse API suppression :", res);
+          }
         } catch (e) {
-          // Gestion d'erreur : tu peux garder l'action dans la queue ou afficher un message
+          // Gestion d'erreur 
           console.error("Erreur lors de la synchronisation offline :", e);
         }
       }

@@ -25,8 +25,6 @@ export function useEquipmentsPaginated() {
   // Sélection
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const clearSelection = () => setSelectedIds([])
-
-  // Hiérarchie (si besoin)
   const [hierarchy, setHierarchy] = useState<any>(null)
 
   // CRUD
