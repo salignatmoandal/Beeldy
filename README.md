@@ -193,8 +193,17 @@ curl -X DELETE http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb
   -d '{"name": "Ascenseur LX-Panorama", "top_k": 5}'
 ```
 
+## Performance with Large Datasets
+
+The application is designed to efficiently handle large volumes of data (100,000+ equipments) thanks to several optimizations:
+
+- **Database Indexing:** All relevant columns are indexed in PostgreSQL, ensuring fast filtering and searching even with large tables.
+- **API Pagination:** The backend API returns paginated results, so only a small subset of data is loaded at a time.
+- **Optimized Queries:** All queries are written to leverage indexes and avoid unnecessary full table scans.
+- **Scalability:** The architecture allows for horizontal scaling of both the backend and the database.
+
 # PostgreSQL Optimization
-_Creating indexes in PostgreSQL helps speed up read-heavy operations by allowing the database to quickly locate rows without scanning the entire table._
+
 ```CREATE INDEX CONCURRENTLY idx_equipment_created_at ON equipments(created_at DESC);
 CREATE INDEX CONCURRENTLY idx_equipment_domain ON equipments(domain);
 CREATE INDEX CONCURRENTLY idx_equipment_type ON equipments(type);
@@ -210,6 +219,8 @@ ab -n 2000 -c 20 "http://localhost:3000/api/equipments/paginated?page=1&pageSize
 ```
 http://localhost:3000/api/equipments/paginated?page=2&pageSize=50
 ```
+
+
 
 # Backend & ML Microservice – Improvements 
 ## Backend (Go) – Optimizations
