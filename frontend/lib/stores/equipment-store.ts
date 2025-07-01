@@ -36,10 +36,10 @@ interface EquipmentState {
   toggleSelection: (id: string) => void
   clearSelection: () => void
   
-  // Actions d'hydratation
+  // Actions of hydration
   setHasHydrated: (hasHydrated: boolean) => void
   
-  // Getters calculés
+  // Getters calculated
   getFilteredEquipments: () => Equipment[]
   getEquipmentById: (id: string) => Equipment | undefined
   
@@ -70,9 +70,9 @@ export const useEquipmentStore = create<EquipmentState>()(
         _hasHydrated: false,
         hierarchy: initialHierarchy,
         
-        // Actions pour les équipements
+        // Actions for equipments
         setEquipments: (equipments) => {
-          // Validation avec Zod
+          // Validation with Zod
           const validatedEquipments = equipments.map(equipment => {
             try {
               return EquipmentSchema.parse(equipment)
