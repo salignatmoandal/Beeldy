@@ -318,7 +318,7 @@ export function EquipmentFormModal({ isOpen, onClose, onSubmit, equipment, hiera
               </Select>
               {subCategories.length === 0 && (
                 <span className="text-gray-500 text-xs">
-                  Aucune sous-catégorie disponible pour cette catégorie.
+                  No sub-categories found fort the selected category.
                 </span>
               )}
               {errors.subCategory && <p className="text-sm text-red-600">{errors.subCategory}</p>}
