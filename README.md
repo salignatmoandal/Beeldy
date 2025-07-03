@@ -151,7 +151,9 @@ http://127.0.0.1:8000/docs
 
 # Sample cURL usage 
 
-```curl http://localhost:3000/api/equipments | jq```
+```
+curl http://localhost:3000/api/equipments | jq
+```
 
 ### Create Equipement (POST/api/equipements)
 
@@ -172,10 +174,14 @@ curl -X POST http://localhost:3000/api/equipments \
 
 ### Get All Equipments  (GET/api/equipments)
 
-```curl http://localhost:3000/api/equipments```
+```
+curl http://localhost:3000/api/equipments
+```
 
 ### Get Equipment by ID(GET/api/equipments:id)
-```curl http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb3a4473cb```
+```
+curl http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb3a4473cb
+```
 
 ### Update equipment (PATCH/api/equiments/:id)
 
