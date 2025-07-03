@@ -53,7 +53,7 @@ The Python service exposes an /enrich endpoint for AI-powered enrichment.
 The backend communicates with the ML service via HTTP and with PostgreSQL for data persistence.
 All services are orchestrated with Docker Compose.
 
-#  Backend Folder Structure
+#  Backend Architecture
 ```
 .
 ├── backend/           # Go backend API
@@ -106,7 +106,8 @@ types/
 
 ```
 
-# Docker 
+# Running Locally 
+
 ```
 docker-compose up --build
 ```
@@ -135,13 +136,20 @@ pnpm run dev
 | DELETE | `/api/equipments/:id`       | Delete equipment                        |
 | POST   | `/api/equipments/enrich`    | Call AI service to enrich metadata      |
 
-# Swagger UI - EndPoint MicroService ML|AI
-
+# Swagger UI - AI Enrichment Microservice (Python)
+_Access OpenAPI Docs :_
 ```
 http://127.0.0.1:8000/docs
 ```
 
-# CURL FORMATTER
+# Example  Enrichment Request 
+
+```curl -X POST http://localhost:3000/api/equipments/enrich \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Ascenseur LX-Panorama", "top_k": 5}'
+```
+
+# Sample cURL usage 
 
 ```curl http://localhost:3000/api/equipments | jq```
 
@@ -186,14 +194,9 @@ curl -X DELETE http://localhost:3000/api/equipments/587dcdb6-c083-423a-abc9-c6cb
 ```
 
 
-# Example AI Enrichment Request 
 
-```curl -X POST http://localhost:3000/api/equipments/enrich \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Ascenseur LX-Panorama", "top_k": 5}'
-```
 
-# Performance with Large Datasets
+# Backend Performance & Optimization with Large Datasets 
 
 The application is designed to efficiently handle large volumes of data (100,000+ equipments) thanks to several optimizations:
 
@@ -202,7 +205,7 @@ The application is designed to efficiently handle large volumes of data (100,000
 - **Optimized Queries:** All queries are written to leverage indexes and avoid unnecessary full table scans.
 - **Scalability:** The architecture allows for horizontal scaling of both the backend and the database.
 
-## PostgreSQL Optimization
+## PostgreSQL Indexing
 
 ```CREATE INDEX CONCURRENTLY idx_equipment_created_at ON equipments(created_at DESC);
 CREATE INDEX CONCURRENTLY idx_equipment_domain ON equipments(domain);
@@ -212,6 +215,7 @@ CREATE INDEX CONCURRENTLY idx_equipment_status ON equipments(status);
 
 ```
 ### How to evaluate the Performance of the Backend 
+**Benchmark with ApacheBench**
 ```
 ab -n 2000 -c 20 "http://localhost:3000/api/equipments/paginated?page=1&pageSize=50" | jq
 ```
